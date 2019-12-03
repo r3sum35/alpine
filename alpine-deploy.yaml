@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine	
+  template:
+    metadata:
+      labels:
+        app: alpine
+    spec:
+      containers: 
+      - name: alpine
+        command: ["/bin/sleep"]
+        args: ["120"]
+        image: docker.io/r3sum35/alpine:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP  
+        volumeMounts:
+        - name: alpinestorage
+          mountPath: /data
+      volumes:
+      - name: alpinestorage
+        persistentVolumeClaim:
+          claimName: alpinevol
